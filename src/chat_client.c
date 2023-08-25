@@ -1,6 +1,6 @@
 #include <arpa/inet.h>
 #include <errno.h>
-#include <fcntk.h>
+#include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,15 +8,18 @@
 #include <unistd.h>
 #include "util.h"
 
+
 int client_socket = -1;
 char username[MAX_NAME_LEN + 1];
 char inbuf[BUFLEN + 1];
 char outbuf[MAX_MSG_LEN + 1];
 
+
+
 void argc_check(int argc, char *prog_name) {
     if(argc != 3) {
         fprintf(stderr, "Usage: %s, <server IP>, <port>\n", prog_name);
-        exit(EXIT FAILURE);
+        exit(EXIT_FAILURE);
     }
 }
 
@@ -24,24 +27,23 @@ void argv_check(char **argv, struct sockaddr_in *server_ip) {
     int ip_conversion = inet_pton(AF_INET, argv[1], &server_ip->sin_addr);
     if (ip_conversion < 0) {
         fprintf(stderr, "Failed to convert IP address '%s'. %s.\n", argv[1], strerror(errno));
-        exit(EXIT FAILURE);
+        exit(EXIT_FAILURE);
         
-    } else if(ip conversion == 0) {
+    } else if(ip_conversion == 0) {
         fprintf(stderr, "Error: Invalid IP address '%s'.\n", argv[1]);
-        exit(EXIT FAILURE);
+        exit(EXIT_FAILURE);
     } else {
         for (int i = 0; i < strlen(argv[2]); i++) {
-            char temp_char argv[2][i];
+            char temp_char = argv[2][i];
             if (temp_char < '0' || temp_char > '9') {
                 fprintf(stderr, "Error: Invalid port entry '%s'.\n", argv[2]);
-                exit(EXIT FAILURE);
+                exit(EXIT_FAILURE);
             }
         }
-        int port_int = atoi(argv[2]);
     }
 }
 
-void get_username() {
+void get_username(void) {
     int process = 1;
     while (process == 1) {
         printf("Enter your desired username: ");
@@ -77,7 +79,7 @@ void close_client_socket(int client_socket) {
     }
 }
 
-void drop_chars() {
+void drop_chars(void) {
     outbuf[0] = 0;
     ssize_t read_chars = 1;
     while (outbuf[0] != '\n' && read_chars != 0) {
@@ -90,7 +92,7 @@ void drop_chars() {
     }
 }
 
-void process_input() {
+void process_input(void) {
     int i = 0;
 
     while (1) {
@@ -99,36 +101,37 @@ void process_input() {
             fprintf(stderr, "Error: read() failed. %s.\n", strerror(errno));
             close_client_socket(client_socket);
             exit(EXIT_FAILURE);
-    } else if (read_chars == 0) {
-        outbuf[i] = '\0';
-        ssize_t send_status;
-        if ((send_status = send(client_socket, outbuf, i + 1, 0)) == -1) { 
-            fprintf(stderr, "Error: failed to send messages to server. %s.\n", strerror(errno));
-            close_client_socket(client_socket);
-            exit(EXIT_FAILURE);
+        } else if (read_chars == 0) {
+            outbuf[i] = '\0';
+            ssize_t send_status;
+            if ((send_status = send(client_socket, outbuf, i + 1, 0)) == -1) { 
+                fprintf(stderr, "Error: failed to send messages to server. %s.\n", strerror(errno));
+                close_client_socket(client_socket);
+                exit(EXIT_FAILURE);
+            }
+            break;
+        } else if (outbuf[i] == '\n') {
+            outbuf[i] = '\0';
+            ssize_t send_status;
+            if ((send_status = send(client_socket, outbuf, i + 1, 0)) == -1) { 
+                fprintf(stderr, "Error: failed to send messages to server. %s.\n", strerror(errno));
+                close_client_socket(client_socket);
+                exit(EXIT_FAILURE);
+            }
+            if (strcmp(outbuf, "bye\n") == 0) {
+                printf("Goodbye.\n");
+                close_client_socket(client_socket);
+                exit(EXIT_FAILURE);
+            }
+            break;
         }
-        break;
-    } else if (outbuf[i] == '\n') {
-        outbuf[i] = '\0';
-        ssize_t send_status;
-        if ((send_status = send(client_socket, outbuf, i + 1, 0)) == -1) { 
-            fprintf(stderr, "Error: failed to send messages to server. %s.\n", strerror(errno));
-            close_client_socket(client_socket);
-            exit(EXIT_FAILURE);
+        i++;
+        if (i == MAX_MSG_LEN) {
+            fprintf(stderr, "Sorry, limit your message to 1 line of at most %d characters.\n",
+                        MAX_MSG_LEN);
+            drop_chars();
+            break;
         }
-        if (strcmp(outbuf, "bye\n") == 0) {
-            printf("Goodbye.\n");
-            close_client_socket(client_socket);
-            exit(EXIT_FAILURE);
-        }
-        break;
-    }
-    i++;
-    if (i == MAX_MSG_LEN) {
-        fprintf(stderr, "Sorry, limit your message to 1 line of at most %d characters.\n",
-                    MAX_MSG_LEN);
-        drop_chars();
-        break;
     }
 }
 
@@ -173,11 +176,11 @@ void handle_client_socket(struct sockaddr_in server_ip, socklen_t ip_length) {
     }
 
     fd_set rd;
-    while (1) (
+    while (1) {
         FD_ZERO(&rd);
         FD_SET(client_socket, &rd);
         FD_SET(STDIN_FILENO, &rd);
-        int largest_fd = (client_socket > STDIN FILENO) ? client_socket : STDIN_FILENO;
+        int largest_fd = (client_socket > STDIN_FILENO) ? client_socket : STDIN_FILENO;
         
         int decr_num = select(largest_fd + 1, &rd, NULL, NULL, NULL);
 
@@ -189,27 +192,28 @@ void handle_client_socket(struct sockaddr_in server_ip, socklen_t ip_length) {
         if (FD_ISSET(STDIN_FILENO, &rd)) {
             if (!feof(stdin)) {
                 process_input();
-            }
-        if (!feof(stdin)) {
-            process_input();
-        } else if (FD_ISSET(client_socket, &rd)) {
-            int more_bytes_recvd;
-            if ((more_bytes_recvd = recv(client_socket, inbuf, BUFLEN, 0)) <= 0) {
-                if (more_bytes_recvd < 0 && errno != EINTR) {
-                    printf("Warning: Failed to receive incoming message.\n");
-                } else if (more_bytes_recvd < 0) {
-                    fprintf(stderr, "Error: Failed to receive message from server. %s.\n", strerror(errno));
-                    close_client_socket(client_socket);
-                    exit(EXIT_FAILURE);
-                } else if (more_bytes_recvd == 0) {
-                    fprintf(stderr, "\nConnection to server has been lost.\n");
-                    close_client_socket(client_socket);
-                    exit(EXIT_FAILURE);               
+            }               
+            if (!feof(stdin)) {
+                process_input();
+            } else if (FD_ISSET(client_socket, &rd)) {
+                int more_bytes_recvd;
+                if ((more_bytes_recvd = recv(client_socket, inbuf, BUFLEN, 0)) <= 0) {
+                    if (more_bytes_recvd < 0 && errno != EINTR) {
+                        printf("Warning: Failed to receive incoming message.\n");
+                    } else if (more_bytes_recvd < 0) {
+                        fprintf(stderr, "Error: Failed to receive message from server. %s.\n", strerror(errno));
+                        close_client_socket(client_socket);
+                        exit(EXIT_FAILURE);
+                    } else if (more_bytes_recvd == 0) {
+                        fprintf(stderr, "\nConnection to server has been lost.\n");
+                        close_client_socket(client_socket);
+                        exit(EXIT_FAILURE);               
+                    }
                 }
-            }
-            else {
-                inbuf[more_bytes_recvd] = '\0';
-                process_socket_input(inbuf, more_bytes_recvd);
+                else {
+                    inbuf[more_bytes_recvd] = '\0';
+                    process_socket_input(inbuf, more_bytes_recvd);
+                }
             }
         }
     }
