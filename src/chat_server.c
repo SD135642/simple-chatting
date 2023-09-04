@@ -308,7 +308,7 @@ int main(int argc, char *argv[]) {
             goto EXIT;
         }
 
-        if (running && FD_ISSET(server_socket, (void *)(&socket))) {
+        if (running && FD_ISSET(server_socket, &sockset)) {
             if (handle_server_socket() == EXIT_FAILURE) {
                 retval = EXIT_FAILURE;
                 goto EXIT;
