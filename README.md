@@ -27,10 +27,10 @@ To run the program, use the following command:
 
 ### Features
 
-Username Input: Allows users to choose a username with character limit validation.
-Error Handling: Provides detailed error messages and gracefully handles failures.
-Message Length Control: Enforces a maximum message length for efficient communication.
-Clean Socket Closure: Ensures proper closure of client sockets.
+    Username Input: Allows users to choose a username with character limit validation.
+    Error Handling: Provides detailed error messages and gracefully handles failures.
+    Message Length Control: Enforces a maximum message length for efficient communication.
+    Clean Socket Closure: Ensures proper closure of client sockets.
 
 
 # chat_server.c
@@ -52,16 +52,16 @@ To run the server, use the following command:
 
 ### Features
 
-Multiple Client Support: Allows multiple clients to connect concurrently.
-User Management: Assigns unique usernames to connected clients.
-Broadcasting: Sends messages from one client to all connected clients.
-Graceful Shutdown: Closes connections and releases resources properly.
+    Multiple Client Support: Allows multiple clients to connect concurrently.
+    User Management: Assigns unique usernames to connected clients.
+    Broadcasting: Sends messages from one client to all connected clients.
+    Graceful Shutdown: Closes connections and releases resources properly.
 
 ### How to Use
 
-Compile the programs using a C compiler.
-Start the server by running ./chat_server <port> on the server machine.
-Clients can connect using ./chat_client <server_IP> <port> on their respective machines.
+    Compile the programs using a C compiler.
+    Start the server by running ./chat_server <port> on the server machine.
+    Clients can connect using ./chat_client <server_IP> <port> on their respective machines.
 
 ### Dependencies
 
