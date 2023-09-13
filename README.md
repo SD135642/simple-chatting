@@ -1,6 +1,6 @@
 #simple-chatting
 
-#Chat Application
+# Chat Application
 
 This project consists of two parts: chat_client.c and chat_server.c. These programs enable communication between a client 
 and a server over a network using TCP/IP.
