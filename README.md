@@ -31,8 +31,8 @@ To run the program, use the following command:
     Message Length Control: Enforces a maximum message length for efficient communication.
     Clean Socket Closure: Ensures proper closure of client sockets.
 
-#chat_server.c
-##Overview
+# chat_server.c
+## Overview
 
 The chat_server.c program establishes a server to which multiple clients can connect. It handles incoming connections, manages user sessions, and facilitates message broadcasting among connected clients.
 
