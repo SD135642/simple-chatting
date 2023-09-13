@@ -31,6 +31,7 @@ To run the program, use the following command:
     Message Length Control: Enforces a maximum message length for efficient communication.
     Clean Socket Closure: Ensures proper closure of client sockets.
 
+
 # chat_server.c
 ## Overview
 
@@ -73,7 +74,7 @@ Both programs rely on standard C libraries and a custom utility file (util.h) pr
 
 Aleksandra Dubrovina
 
-Contact
+### Contact
 
 For inquiries or feedback, please contact aleks.dubrovina@gmail.com.
 
