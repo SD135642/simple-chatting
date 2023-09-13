@@ -14,8 +14,8 @@ features like username input, error handling, message length control, and clean 
 ### Usage
 
 This program is designed to work in a Linux environment. To build, run the commands:
-cd <repository's directory> 
-make
+    cd <repository's directory> 
+    make
 
 To run the program, use the following command:
 
