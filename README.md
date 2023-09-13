@@ -1,6 +1,4 @@
-#simple-chatting
-
-# Chat Application
+# Simple-chatting
 
 This project consists of two parts: chat_client.c and chat_server.c. These programs enable communication between a client 
 and a server over a network using TCP/IP.
@@ -21,9 +19,8 @@ This program is designed to work in a Linux environment. To build, run the comma
 To run the program, use the following command:
 
     ./chat_client <server_IP> <port>
-
-<server_IP>: The IP address of the target server.
-<port>: The port number on which the server is listening.
+    <server_IP>: The IP address of the target server.
+    <port>: The port number on which the server is listening.
 
 ### Features
 
@@ -47,8 +44,7 @@ This program is designed to work in a Linux environment. To build, run the comma
 To run the server, use the following command:
 
     ./chat_server <port_number>
-
-<port_number>: The port on which the server will listen for incoming connections (range: 1024-65535).
+    <port_number>: The port on which the server will listen for incoming connections (range: 1024-65535).
 
 ### Features
 
@@ -68,9 +64,7 @@ To run the server, use the following command:
 Both programs rely on standard C libraries and a custom utility file (util.h) provided in this project.
 
 ### Notes
-
     Ensure that the server is active and listening on the specified IP and port.
-Customize the programs to suit specific requirements or add additional functionalities as needed.
 
 ### Author
 
