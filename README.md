@@ -64,7 +64,7 @@ To run the server, use the following command:
 Both programs rely on standard C libraries and a custom utility file (util.h) provided in this project.
 
 ### Notes
-    Ensure that the server is active and listening on the specified IP and port.
+Ensure that the server is active and listening on the specified IP and port.
 
 ### Author
 
